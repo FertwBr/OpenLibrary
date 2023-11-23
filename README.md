@@ -5,7 +5,11 @@ A aplicação irá apresentar uma lista de livros obtidos via API, permitir que 
 
 ## Uso
 
-EXPLICAR USO + IMAGENS
+Digite um texto no campo e clicar na lupa para pesquisar um livro no catálogo:
+
+
+![print-tela](https://github.com/FertwBr/OpenLibrary/assets/96090586/e1303c44-7d27-4623-a62f-a43b87bcfdc1)
+
 
 
 ## Desenvolvimento do projeto
@@ -59,7 +63,49 @@ O Ktor é uma ferramenta poderosa que pode ser usada para criar aplicações ass
 **-Suporte para testes:** O Ktor fornece suporte para testes unitários e de integração, o que facilita a verificação da funcionalidade da sua aplicação.
 
 
-## Trechos de código relevantes
+## Trechos de código relevantes:
+
+**OpenLibraryScrollListener**
+
+A classe `OpenLibraryScrollListener` é uma subclasse de `RecyclerView.OnScrollListener()`. Ela é usada para detectar quando 
+o usuário rolou até um certo ponto em uma lista de itens em um `RecyclerView`.
+
+```
+abstract class OpenLibraryScrollListener(
+    private val layoutManager: LinearLayoutManager,
+    private val threshold: Int
+) : RecyclerView.OnScrollListener() {
+
+    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+        super.onScrolled(recyclerView, dx, dy)
+
+        val totalItemCount = layoutManager.itemCount
+        val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+
+        if (totalItemCount == lastVisibleItemPosition + threshold) {
+            onScrolledToThreshold()
+        }
+    }
+
+    abstract fun onScrolledToThreshold()
+}
+```
+
+
+**Detalhes:**
+
+- `layoutManager: LinearLayoutManager`: Este é o gerenciador de layout associado ao RecyclerView. Ele é usado para obter informações sobre o estado atual do RecyclerView, como a posição do último item visível.
+
+- `threshold: Int`: Este é o limite que determina quando o método `onScrolledToThreshold()` deve ser chamado. Se o número total de itens for igual à posição do último item visível mais o limite, o método `onScrolledToThreshold()` será chamado.
+
+- `onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int)`: Este método é chamado sempre que o RecyclerView é rolado. Ele verifica se o total de itens é igual à posição do último item visível mais o limite. Se for, ele chama o método `onScrolledToThreshold()`.
+
+- `onScrolledToThreshold()`: Este é um método abstrato que deve ser implementado pela classe que estende `OpenLibraryScrollListener`. Ele é chamado quando o usuário rolou até o limite especificado.
+
+**Uso:**
+
+Essa classe permite que você execute uma ação específica quando o usuário rola até um certo ponto em um RecyclerView. Isso pode ser útil, por exemplo, para carregar mais itens quando o usuário chega ao final da lista.
+
 
 
 
